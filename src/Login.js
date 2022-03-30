@@ -14,9 +14,9 @@ function Login(){
                     <input placeholder="Email" type={"email"}></input>
                     <input placeholder="Senha" type={"password"}></input>
                     <button type={"submit"}> Entrar</button>
+
                     <Link to={'/cadastro'}>
                         <h1>Não tem uma conta? <strong> cadastre-se</strong></h1>
-
                     </Link>
                     
                 </Form>
@@ -41,7 +41,6 @@ const Form = styled.form`
     
     justify-content:center;
     align-items:center;
-
 
     button{
         width: 303px;
