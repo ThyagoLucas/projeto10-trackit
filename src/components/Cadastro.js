@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import Logo from '../src/assets/img/trackit-logo.png';
+import Logo from '../assets/img/trackit-logo.png'
 import api from './api';
 import styled from 'styled-components';
 
@@ -8,7 +8,6 @@ import styled from 'styled-components';
 function Cadastro (){
     const navigate = useNavigate();
     const [datasUser, setDatas] = useState({email:'', name:'',image:'', password:''});
-    console.log(datasUser);
 
     function sendRegister(event){
 
@@ -18,7 +17,6 @@ function Cadastro (){
             .post('/auth/sign-up', datasUser)
             .then(response => {
                 alert("cadastrado com sucesso!!");
-                console.log(response)
                 navigate('/');
             })
             .catch(err => console.log(err));
@@ -32,10 +30,10 @@ function Cadastro (){
         <main>
             <img src={Logo} alt={'Logo do track-it'}></img>
             <Form onSubmit={sendRegister}> 
-                <input placeholder="Email" required type={"email"} value={datasUser.email} onChange={(e) => setDatas({...datasUser, email: e.target.value}) }></input>
-                <input placeholder="Senha" required type={"password"} value={datasUser.password} onChange={(e) => setDatas({...datasUser, password: e.target.value}) }></input>
-                <input placeholder="Nome" required type={"text"} value={datasUser.name} onChange={(e) => setDatas({...datasUser, name: e.target.value}) }></input>
-                <input placeholder="Foto" required type={"url"} value={datasUser.image} onChange={(e) => setDatas({...datasUser, image: e.target.value}) }></input>
+                <input required placeholder="Email" type={"email"} value={datasUser.email} onChange={(e) => setDatas({...datasUser, email: e.target.value}) }></input>
+                <input required placeholder="Senha" type={"password"} value={datasUser.password} onChange={(e) => setDatas({...datasUser, password: e.target.value}) }></input>
+                <input required placeholder="Nome" type={"text"} value={datasUser.name} onChange={(e) => setDatas({...datasUser, name: e.target.value}) }></input>
+                <input required placeholder="Foto" type={"url"} value={datasUser.image} onChange={(e) => setDatas({...datasUser, image: e.target.value}) }></input>
 
                 <button type={"submit"} >Cadastrar</button>
                 

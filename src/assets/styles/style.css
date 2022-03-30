@@ -7,8 +7,6 @@ body{
 
 .root{
   margin-top: 50px;
-  
-
 }
 
 main{
@@ -17,10 +15,6 @@ main{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
-  
-
-
 }
 
 main img{
