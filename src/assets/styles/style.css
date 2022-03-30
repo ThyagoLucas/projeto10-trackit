@@ -1,0 +1,29 @@
+body{
+  font-family: 'Lexend Deca', sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.root{
+  margin-top: 50px;
+  
+
+}
+
+main{
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  
+
+
+}
+
+main img{
+  width: 150px;
+  margin-bottom: 30px;
+}
