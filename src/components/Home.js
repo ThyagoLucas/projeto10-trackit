@@ -1,8 +1,18 @@
+import Footer from "./Footer";
+
 function Home (){
 
     return(
-    
-        <h1>Eu sou a Home</h1>
+    <>
+        
+        <main>
+            
+            <h1> Eu sou o topo </h1>
+            
+        </main>
+        <Footer />
+    </>
+        
 
 
     )

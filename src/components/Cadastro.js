@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+
 import Logo from '../assets/img/trackit-logo.png'
 import api from './api';
-import styled from 'styled-components';
 
+import styled from 'styled-components';
 
 function Cadastro (){
     const navigate = useNavigate();
@@ -20,16 +21,14 @@ function Cadastro (){
                 navigate('/');
             })
             .catch(err => console.log(err));
-
-
     }
 
     return(
-
         <>
         <main>
             <img src={Logo} alt={'Logo do track-it'}></img>
             <Form onSubmit={sendRegister}> 
+
                 <input required placeholder="Email" type={"email"} value={datasUser.email} onChange={(e) => setDatas({...datasUser, email: e.target.value}) }></input>
                 <input required placeholder="Senha" type={"password"} value={datasUser.password} onChange={(e) => setDatas({...datasUser, password: e.target.value}) }></input>
                 <input required placeholder="Nome" type={"text"} value={datasUser.name} onChange={(e) => setDatas({...datasUser, name: e.target.value}) }></input>
@@ -41,12 +40,8 @@ function Cadastro (){
 
         </main>
         
-        
         </>
-
-        
-    )
-
+    );
 }
 
 const Form = styled.form`
