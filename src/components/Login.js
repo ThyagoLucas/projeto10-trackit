@@ -13,12 +13,12 @@ function Login(){
     
     const {token, setToken} = useContext(TokenContext);
 
-    token != null ? navigate('/hoje'):<></>;
+    token != null ? navigate('/habitos'):<></>;
 
     const [loginDatas, setDatasLogin] = useState({email:'', password:''});
     const [inputsLockeds, setInputs] = useState({activate: false, buttom:'Entrar'});
   
-    function login(event){
+    function tryLogin(event){
 
         event.preventDefault();
         setInputs({...inputsLockeds, activate: true, buttom:<Spinner/>});
@@ -29,7 +29,7 @@ function Login(){
             .post('/auth/login', loginDatas)
             .then(response => {
                 setToken(response.data.token);
-                navigate('/hoje'); 
+                navigate('/habitos'); 
                 localStorage.setItem('token', response.data.token);   
                 localStorage.setItem('userImage', response.data.image);               
             })
@@ -46,7 +46,7 @@ function Login(){
         <main>
             <img src={Logo} alt={'Logo do track-it'}></img>
 
-            <Form onSubmit={login}>
+            <Form onSubmit={tryLogin}>
                 <input required disabled={inputsLockeds.activate} placeholder="Email" type={"email"} onChange={(e)=> setDatasLogin({...loginDatas, email: e.target.value})}></input>
                 <input required disabled={inputsLockeds.activate} placeholder="Senha" type={"password"} onChange={(e)=> setDatasLogin({...loginDatas, password: e.target.value})}></input>
 
@@ -60,8 +60,6 @@ function Login(){
         </main>
         </>
     );
-
-
 }
 
 const Form = styled.form`
