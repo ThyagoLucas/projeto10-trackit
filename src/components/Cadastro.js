@@ -11,9 +11,8 @@ import styled from 'styled-components';
 function Cadastro (){
 
     const {token} = useContext(TokenContext);
-    token === null ? Navigate('/'):<></>;
-
     const navigate = useNavigate();
+    token !== null ? navigate('/'):<></>;
     const [datasUser, setDatas] = useState({email:'', name:'',image:'', password:''});
     const [inputsLockeds, setInputs] = useState({activate: false, button:'Cadastrar'});
 
