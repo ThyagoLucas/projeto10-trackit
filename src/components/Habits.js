@@ -15,24 +15,20 @@ function Habits (){
         <Header />
 
         <main>
-
             <Container>
                 <Top />
                 <MyHabits/>
                 
             </Container>
-     
         </main>
 
-        <Footer />
+        <Footer percentage={0}/>
     </>
     )
 }
 
 function Top(){
-
     const [status, setStatusForms] = useState(false);
-  
     return(
         <>
             <div className="top">
@@ -52,10 +48,7 @@ function Top(){
 function FormState ({state, setStatus}){
 
     const {token} = useContext(TokenContext);
-    
     const [habit, setDataHabit] = useState({name:'', days:[]});
-
-    console.log(habit);
 
     function assembleHabit(number){
         
@@ -75,11 +68,7 @@ function FormState ({state, setStatus}){
 
         event.preventDefault();
 
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
+        const config = {headers: {Authorization: `Bearer ${token}`}};
 
         api
             .post('/habits', habit, config)
@@ -146,46 +135,35 @@ function Buttons ({setStatusForms, sendHabit}){
 }
 
 function MyHabits({}){
-
+    
     const {token} = useContext(TokenContext);
-
     const [myHabits, setMyHabits] = useState([]);
+    const [refresh, setRefresh] = useState([]);
     console.log(myHabits);
-
 
     useEffect(()=>{
 
         myHabits.length === 0 ? 
         <h1>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h1>: <></>
-
         
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
-
+        const config = {headers: {Authorization: `Bearer ${token}`}};
         api
             .get('/habits', config)
             .then(response => {
                 setMyHabits(response.data)
-                console.log('funfou');
+               
             })
             .catch(err => alert('Erro'));
-            
-
-    },[])
+    },[refresh])
 
     return (
         <div className="habits">
-            { myHabits.map((habit, index) => <Habit key={index} habit={habit} />)}
+            { myHabits.map((habit, index) => <Habit key={index} habit={habit}  setRefresh={setRefresh}/>)}
         </div>
 
     )
-      
-
 }
-function Habit({habit}){
+function Habit({habit, setRefresh}){
     const{id, name, days}= habit;
     const [stateDelete, setStateDelete] = useState(false);
 
@@ -195,7 +173,7 @@ function Habit({habit}){
             <div>
                 <h1 className="habitName">{name}</h1>
                 <h1 className="trash" onClick={()=> setStateDelete(true)}> <BsTrashFill/></h1>
-                <DeleteHabit id={id} name={name} state={stateDelete} setStateDelete={setStateDelete}/>
+                <DeleteHabit id={id} name={name} state={stateDelete} setStateDelete={setStateDelete} setRefresh={setRefresh}/>
             </div>
             
     
@@ -204,24 +182,18 @@ function Habit({habit}){
 
 }
 
-function DeleteHabit({id, name, state, setStateDelete}){
+function DeleteHabit({id, name, state, setStateDelete, setRefresh}){
     const {token} = useContext(TokenContext);
 
     function deleteH(id){
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
+        const config = {headers: {Authorization: `Bearer ${token}`}}
         api
             .delete(`/habits/${id}`, config)
             .then(response => {
                 alert("Habito apagado");
-                setStateDelete(false);  })
-            .catch(err => console.log("Esse foi o erro", err));
-            
-
-        
+                setStateDelete(false);
+                setRefresh(response)})
+            .catch(err => console.log("Esse foi o erro", err));        
     }
 
     return state
@@ -262,42 +234,34 @@ const Container = styled.div`
         flex-direction: row;
         align-items: center;
         width: 100%;
-       
     }
     button{
         background-color: #E5E5E5;
     }
-
     form{
         margin-top: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-    
     }
     form input{
         padding: 10px;
         width: 75%;
         border: 1px solid #D5D5D5;
         border-radius: 5px;
-        margin-top:20px
-        
+        margin-top:20px   
     }
     input::placeholder{
         font-size: 15px;        
-    }
-    
+    }  
     .weekday{
         display: flex;
         align-items: center;
         justify-content: flex-start;
         flex-direction: row;
-        
         width: 80%;
-        margin-top: 10px;
-      
-        
+        margin-top: 10px; 
     }
     .days{
         display: flex;
@@ -313,7 +277,6 @@ const Container = styled.div`
         background-color: #CFCFCF;
         border-color: lightgreen;
         color: green;
-        
     }
     .off{
         color: #DBDBDB;
@@ -325,11 +288,9 @@ const Container = styled.div`
         width: 75%;
         padding:10px;
         height: 50px;
-        
     }
     .cancel{
         font-size: 15.976px;
-        
         color: #52B6FF;
         margin-right: 10px ;
     }
@@ -348,11 +309,9 @@ const Container = styled.div`
         display: flex;
         align-items: center;
         flex-direction: column;
-        flex-wrap: wrap;
-       
+        flex-wrap: wrap; 
     }
     .habit{
-        
         width:  100%;
         height: 91px;
         background-color: #FFFFFF;
@@ -362,12 +321,10 @@ const Container = styled.div`
         border-radius: 5px;  
     }
     .habit div{
-
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         width: 100%;
-        
     }
     .habitName{
         margin-left: 10px;
@@ -397,20 +354,15 @@ const Container = styled.div`
         margin-left: 10px  
     }
     .optionsDelete{
-
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: flex-end;
-
-
     }
-
 `
 const Form = styled.form`
     background-color: #FFFFFF;
-    border-radius: 5px;
-    
+    border-radius: 5px; 
 `
 
 export default Habits;

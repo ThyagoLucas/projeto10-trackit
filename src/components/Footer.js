@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Progressbar from "./libs/progressBar/ProgressBar";
 
-function Footer (){
+function Footer ({percentage, color}){
 
     return(
         <ContainerFooter>
@@ -12,7 +12,7 @@ function Footer (){
             </Link>
 
             <Link to={'/hoje'}>
-                <Progressbar/>
+                <Progressbar percentage={percentage} color={color}/>
             </Link>
 
             <Link to={'/historico'}>

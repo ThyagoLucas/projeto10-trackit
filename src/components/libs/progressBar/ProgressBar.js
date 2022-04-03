@@ -1,36 +1,27 @@
 import React from "react";
-import { useState } from "react";
 import { CircularProgressbar, buildStyles} from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import styled from "styled-components";
 
 
-function Progressbar(){
-
-  const [percentage, setPercentage] = useState(50);
+function Progressbar({percentage, color}){
 
   return(
-
-    
-      
-    <DivProgressBar label="Default">
-
-      
+ 
+    <DivProgressBar label="Default">      
       <CircularProgressbar
         value={percentage}
-        text={`${percentage}%`}
+        text={`hoje`}
         background
         backgroundPadding={6}
         styles={buildStyles({
           backgroundColor: "#3e98c7",
           textColor: "#fff",
-          pathColor: "#fff",
+          pathColor: `${color}`,
           trailColor: "transparent"
         })}
       />
-    </DivProgressBar>
-    
-    
+    </DivProgressBar>    
   )
 }
 
