@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState} from "react";
 
 import Cadastro from "./Cadastro";
@@ -7,12 +7,11 @@ import TokenContext from "./context/Token";
 import Habits from "./Habits";
 import Today from "./Today";
 import Historic from "./Historic";
-import { useEffect } from "react/cjs/react.production.min";
+
 
 function App (){
 
     const [token, setToken] = useState(localStorage.getItem('token'));
-    //localStorage.removeItem('token');
     
     return(
 

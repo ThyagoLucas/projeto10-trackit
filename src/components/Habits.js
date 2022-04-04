@@ -10,14 +10,34 @@ import TokenContext from "./context/Token";
 
 function Habits (){
 
+    const {token} = useContext(TokenContext);
+    const [myHabits, setMyHabits] = useState([]);
+    const [refresh, setRefresh] = useState([]);
+    console.log(myHabits);
+
+    useEffect(()=>{
+
+        myHabits.length === 0 ? 
+        <h1>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h1>: <></>
+        
+        const config = {headers: {Authorization: `Bearer ${token}`}};
+        api
+            .get('/habits', config)
+            .then(response => {
+                setMyHabits(response.data)
+               
+            })
+            .catch(err => alert('Erro'));
+    },[refresh])
+
     return(
     <>
         <Header />
 
         <main>
             <Container>
-                <Top />
-                <MyHabits/>
+                <Top setRefresh={setRefresh}/>
+                <MyHabits myHabits={myHabits} setRefresh={setRefresh}/>
                 
             </Container>
         </main>
@@ -27,7 +47,7 @@ function Habits (){
     )
 }
 
-function Top(){
+function Top({setRefresh}){
     const [status, setStatusForms] = useState(false);
     return(
         <>
@@ -39,13 +59,13 @@ function Top(){
                 </button>            
             </div>
 
-            <FormState state = {status} setStatus={setStatusForms}/>
+            <FormState state = {status} setStatus={setStatusForms} setRefresh={setRefresh}/>
             
         </>
     )
 }
 
-function FormState ({state, setStatus}){
+function FormState ({state, setStatus, setRefresh}){
 
     const {token} = useContext(TokenContext);
     const [habit, setDataHabit] = useState({name:'', days:[]});
@@ -74,6 +94,7 @@ function FormState ({state, setStatus}){
             .post('/habits', habit, config)
             .then(response => {
                 setStatus(false);
+                setRefresh(response);
 
             })
             .catch(err => console.log('OOO Erro', err));
@@ -84,7 +105,10 @@ function FormState ({state, setStatus}){
             <input required placeholder="nome do hábito" value={habit.name} onChange={(e)=> setDataHabit({...habit, name: e.target.value})}></input>
             <Days sendHabit={assembleHabit} />
 
-            <Buttons setStatusForms={setStatus} sendHabit={sendHabit}/>
+            <div className="buttons">
+                <button className="cancel" onClick={()=> setStatus(false)}>Cancelar</button>
+                <button className="save">Salvar</button>
+            </div>
             
         </Form> : <></>
     
@@ -120,42 +144,9 @@ function Day ({letter, sendHabit, numberDay}){
     );
 }
 
-function Buttons ({setStatusForms, sendHabit}){
-
-    return(
-
-        <div className="buttons">
-            <button className="cancel" onClick={()=> setStatusForms(false)}>Cancelar</button>
-            <button className="save">Salvar</button>
-        </div>
-
-    )
-
-
-}
-
-function MyHabits({}){
+function MyHabits({myHabits, setRefresh}){
     
-    const {token} = useContext(TokenContext);
-    const [myHabits, setMyHabits] = useState([]);
-    const [refresh, setRefresh] = useState([]);
-    console.log(myHabits);
-
-    useEffect(()=>{
-
-        myHabits.length === 0 ? 
-        <h1>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h1>: <></>
-        
-        const config = {headers: {Authorization: `Bearer ${token}`}};
-        api
-            .get('/habits', config)
-            .then(response => {
-                setMyHabits(response.data)
-               
-            })
-            .catch(err => alert('Erro'));
-    },[refresh])
-
+   
     return (
         <div className="habits">
             { myHabits.map((habit, index) => <Habit key={index} habit={habit}  setRefresh={setRefresh}/>)}

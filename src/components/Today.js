@@ -14,10 +14,7 @@ function Today (){
     const [infoDones, setPercentage] = useState({total:0, done:0});
     const [habitsToday, setHabitsToday] = useState([]);
     const [refresh, setRefresh] = useState({});
-    const percentage = Math.ceil((infoDones.done/infoDones.total) * 100);
-    console.log(percentage);
-    
-    
+    const percentage = Math.ceil((infoDones.done/infoDones.total) * 100) || 0;
 
     const daysWeek = new Map([[0,'Domingo'], [1, 'Segunda'],[2, 'Terça'], [3, 'Quarta'], [4, 'Quinta'], [5, 'Sexta'], [6, 'Sábado']]);
     const dayjs = require('dayjs');
@@ -38,20 +35,16 @@ function Today (){
             .catch(err =>  console.log('Eu sou o erro', err));        
     },[refresh]);
 
-
-
     return(
 
         <>
         <Header/>
         <main>
-
             <Container>
             <TopToday weekday={weekday} day={day} percentage={percentage}/>
             {habitsToday.map((habit, index)=> <TodayHabit key={index} habit={habit} setRefresh={setRefresh} />)}
 
             </Container>
-
         </main>
         <Footer percentage={percentage} color={'#fff'}/>
         </>
@@ -60,8 +53,6 @@ function Today (){
 }
 
 function TopToday({weekday, day, percentage}){
-
-   
 
     return(
         <>
@@ -72,10 +63,7 @@ function TopToday({weekday, day, percentage}){
             : <h1 className="green">{percentage}% dos hábitos concluídos</h1>}
               
         </div>
-        
         </>
-
-
     )
 }
 
@@ -121,18 +109,12 @@ function TodayHabit({habit, setRefresh}){
             </h1>
             
         </div>
-
-
-
     )
 }
 
 const Container = styled.div`
 
-    
     width: 100%;
-    
-    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -141,6 +123,7 @@ const Container = styled.div`
     .top{
         width: 100%;
         color: #126BA5;
+        z-index: 0;
     }
     .top h2{
         font-size: 23px;
@@ -150,7 +133,6 @@ const Container = styled.div`
         font-size: 18x;
         line-height: 22px;
         margin-bottom: 15px;
-
     }
 
     .green{
