@@ -37,7 +37,7 @@ function Login(){
                 setInputs({...inputsLockeds, activate: false, buttom:'Entrar'});
                 alert("Usuario ou senha errados"); 
             });
-        }, 3000); 
+        }, 1500); 
 
     }
 

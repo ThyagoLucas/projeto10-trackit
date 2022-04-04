@@ -12,10 +12,11 @@ import Historic from "./Historic";
 function App (){
 
     const [token, setToken] = useState(localStorage.getItem('token'));
+    const [percentage, setPercentage] = useState(0);
     
     return(
 
-        <TokenContext.Provider value={{token, setToken}}>
+        <TokenContext.Provider value={{token, setToken, percentage, setPercentage}}>
             <BrowserRouter>
                 <Routes >
                     <Route path="/" element={<Login />} ></Route>

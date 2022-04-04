@@ -1,34 +1,33 @@
 import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
-import dayjs from "dayjs";
+
 import { useState, useEffect, useContext } from "react";
 import api from "./api";
 import {AiFillCheckSquare} from 'react-icons/ai';
 
 import TokenContext from "./context/Token";
+import { useNavigate } from "react-router-dom";
 
 function Today (){
 
-    const {token} = useContext(TokenContext);
-    const [infoDones, setPercentage] = useState({total:0, done:0});
-    const [habitsToday, setHabitsToday] = useState([]);
-    const [refresh, setRefresh] = useState({});
-    const percentage = Math.ceil((infoDones.done/infoDones.total) * 100) || 0;
-
-    const daysWeek = new Map([[0,'Domingo'], [1, 'Segunda'],[2, 'Terça'], [3, 'Quarta'], [4, 'Quinta'], [5, 'Sexta'], [6, 'Sábado']]);
-    const dayjs = require('dayjs');
-    const day = dayjs().format('DD/MM');
-    const weekday = daysWeek.get(dayjs().day());
+    const navigate = useNavigate(); 
+    const {token, setPercentage, percentage} = useContext(TokenContext);   //tokens that the components uses
+    const [infoDones, setDones] = useState({total:0, done:0});            // infos to calculate the percentage
+    const [habitsToday, setHabitsToday] = useState([]);                  //  set the habits coming from API
+    const [refresh, setRefresh] = useState({});                         //   to refresh the useEffect when updated some child, how: add habit for exemple
+    setPercentage(Math.ceil((infoDones.done/infoDones.total) * 100) || 0); // set the percentage arounded up 
 
     useEffect(()=>{
+
+        token === null ? navigate('/'):<></>;
 
         const config = {headers: {Authorization: `Bearer ${token}`}};
         
         api.get('/habits/today', config)
             .then(response => {
-                const tam = response.data.filter((item, index) => response.data[index].done === true);
-                setPercentage({total: response.data.length, done: tam.length});  
+                const tam = response.data.filter((item, index) => response.data[index].done === true); // filters only completed habits
+                setDones({total: response.data.length, done: tam.length});  
                 setHabitsToday(response.data);
                
             })
@@ -38,21 +37,31 @@ function Today (){
     return(
 
         <>
-        <Header/>
-        <main>
-            <Container>
-            <TopToday weekday={weekday} day={day} percentage={percentage}/>
-            {habitsToday.map((habit, index)=> <TodayHabit key={index} habit={habit} setRefresh={setRefresh} />)}
+            <Header/>
+            <main>
+                <Container>
+                    <TopToday />
+                    {habitsToday.map((habit, index)=> <TodayHabit 
+                                                                    key={index}
+                                                                    habit={habit}
+                                                                    setRefresh={setRefresh} />)}
 
-            </Container>
-        </main>
-        <Footer percentage={percentage} color={'#fff'}/>
+                </Container>
+            </main>
+            <Footer color={'#fff'} refresh={refresh}/>
         </>
         
     )
 }
 
-function TopToday({weekday, day, percentage}){
+function TopToday(){
+    const {percentage} = useContext(TokenContext);
+
+    const daysWeek = new Map([[0,'Domingo'], [1, 'Segunda'],[2, 'Terça'], [3, 'Quarta'], [4, 'Quinta'], [5, 'Sexta'], [6, 'Sábado']]);
+    const dayjs = require('dayjs');
+    const day = dayjs().format('DD/MM');
+    const weekday = daysWeek.get(dayjs().day());
+
 
     return(
         <>
@@ -75,6 +84,7 @@ function TodayHabit({habit, setRefresh}){
     const [check, setCheck] = useState(done);
     
     const statusCheck = `check ${check ? 'green': 'gray'}`;
+    const colorSequence = `${currentSequence === highestSequence && highestSequence>0 ? 'green': 'grey'}`
 
     function checkAndUnCheck(id){
 
@@ -92,7 +102,6 @@ function TodayHabit({habit, setRefresh}){
             .post(`/habits/${id}/uncheck`, undefined, config)
             .then(response => setRefresh(response))
             .catch(err => console.log('Esse foi o erro ao marcar o hab como feito', err))
-        
     }
 
     return (
@@ -100,8 +109,8 @@ function TodayHabit({habit, setRefresh}){
         <div className="habitsToday">
             <div>
                 <h1>{name}</h1>
-                <h3>Sequencia atual: {currentSequence} dias</h3>
-                <h3>Seu recorde: {highestSequence} dias</h3>
+                <h3 className={colorSequence}>Sequencia atual: {currentSequence} dias</h3>
+                <h3 className={colorSequence}>Seu recorde: {highestSequence} dias</h3>
 
             </div>
             <h1 className={statusCheck} onClick={()=> checkAndUnCheck(id)}>
@@ -161,11 +170,6 @@ const Container = styled.div`
         align-items: center;
         justify-content: center;
     }
-
-
-    
-
-
 `
 
 export default Today;

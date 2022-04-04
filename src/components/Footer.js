@@ -1,9 +1,33 @@
 import { Link } from "react-router-dom";
+import { useContext, useEffect, useState} from "react";
 import styled from "styled-components";
 import Progressbar from "./libs/progressBar/ProgressBar";
+import TokenContext from "./context/Token";
+import api from "./api";
 
-function Footer ({percentage, color}){
+function Footer ({color, refresh}){
+    const {token, percentage, setPercentage} = useContext(TokenContext);
+    const [infoDones, setDones] = useState({total:0, done:0});
+    setPercentage(Math.ceil((infoDones.done/infoDones.total) * 100) || 0);
 
+
+    useEffect(()=>{
+
+        const config = {headers: {Authorization: `Bearer ${token}`}};
+        
+        api.get('/habits/today', config)
+            .then(response => {
+                const tam = response.data.filter((item, index) => response.data[index].done === true); // filters only completed habits
+                setDones({total: response.data.length, done: tam.length});  
+                
+               
+            })
+            .catch(err =>  console.log('Eu sou o erro', err));        
+    },[refresh]);
+    
+
+    
+    
     return(
         <ContainerFooter>
             

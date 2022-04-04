@@ -5,7 +5,7 @@ import { Bars } from "react-loader-spinner";
 function Spinner(){
     return(
         <Bars 
-            height="35"
+            height="20"
             color='green'
             ariaLabel='loading'
         />
