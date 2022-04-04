@@ -70,6 +70,8 @@ function FormState ({state, setStatus, setRefresh}){
     const {token} = useContext(TokenContext);
     const [habit, setDataHabit] = useState({name:'', days:[]});
 
+    const status = `${state=== true ? '':'disabled'}`;
+
     function assembleHabit(number){
         
         const thereIs = habit.days.indexOf(number);
@@ -90,6 +92,8 @@ function FormState ({state, setStatus, setRefresh}){
 
         const config = {headers: {Authorization: `Bearer ${token}`}};
 
+        state ? 
+
         api
             .post('/habits', habit, config)
             .then(response => {
@@ -97,11 +101,12 @@ function FormState ({state, setStatus, setRefresh}){
                 setRefresh(response);
 
             })
-            .catch(err => console.log('OOO Erro', err));
+            .catch(err => console.log('OOO Erro', err))
+            :<></>;
     }
-    return state === true ?
+    return(
 
-        <Form onSubmit={sendHabit}>
+        <Form onSubmit={sendHabit} className={status}>
             <input required placeholder="nome do hábito" value={habit.name} onChange={(e)=> setDataHabit({...habit, name: e.target.value})}></input>
             <Days sendHabit={assembleHabit} />
 
@@ -110,7 +115,11 @@ function FormState ({state, setStatus, setRefresh}){
                 <button className="save">Salvar</button>
             </div>
             
-        </Form> : <></>
+        </Form> 
+
+    ) 
+
+        
     
 }
 
@@ -146,7 +155,6 @@ function Day ({letter, sendHabit, numberDay}){
 
 function MyHabits({myHabits, setRefresh}){
     
-   
     return (
         <div className="habits">
             { myHabits.map((habit, index) => <Habit key={index} habit={habit}  setRefresh={setRefresh}/>)}
@@ -166,11 +174,8 @@ function Habit({habit, setRefresh}){
                 <h1 className="trash" onClick={()=> setStateDelete(true)}> <BsTrashFill/></h1>
                 <DeleteHabit id={id} name={name} state={stateDelete} setStateDelete={setStateDelete} setRefresh={setRefresh}/>
             </div>
-            
-    
         </div>
     )
-
 }
 
 function DeleteHabit({id, name, state, setStateDelete, setRefresh}){
@@ -210,6 +215,10 @@ const Container = styled.div`
     justify-content: center;
     flex-direction: column;
     width: 100%;
+
+    .disabled{
+        display: none;
+    }
     
     .top h1{
         padding:10px;
